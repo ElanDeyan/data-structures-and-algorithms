@@ -1,10 +1,10 @@
-from typing import Container, Self
+from typing import Self
 from collections.abc import Sequence
 
 from state_error import EmptyStackError
 
 
-class Stack[E](Container):
+class Stack[E]:
     _internal_list: list[E]
 
     def __init__(self) -> None:
