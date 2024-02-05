@@ -17,6 +17,8 @@ class Stack[E]:
 
         for item in sequence:
             stack.push(item)
+        
+        return stack
 
     def push(self, element: E) -> None:
         self._internal_list.append(element)
