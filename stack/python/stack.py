@@ -1,10 +1,10 @@
-from typing import Self
+from typing import Collection, Iterator, Self, override
 from collections.abc import Sequence
 
 from state_error import EmptyStackError
 
 
-class Stack[E]:
+class Stack[E](Collection):
     _internal_list: list[E]
 
     def __init__(self) -> None:
@@ -52,3 +52,15 @@ class Stack[E]:
     @property
     def is_empty(self) -> bool:
         return len(self._internal_list) == 0
+    
+    @override
+    def __len__(self) -> int:
+        return len(self._internal_list)
+    
+    @override
+    def __contains__(self, element: E) -> bool:
+        return element in self._internal_list
+    
+    @override
+    def __iter__(self) -> Iterator:
+        raise NotImplementedError()
