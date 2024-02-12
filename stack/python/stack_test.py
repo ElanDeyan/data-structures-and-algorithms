@@ -64,7 +64,7 @@ class TestStack(unittest.TestCase):
         self.assertIn(3, stack)
 
     def test_pop(self):
-        stack = Stack[int].from_sequence([1,2,3,4,5,6,7,8,9,10])
+        stack = Stack[int].from_sequence([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         poped_item = stack.pop()
 
@@ -88,6 +88,33 @@ class TestStack(unittest.TestCase):
         maybe_int = stack.try_pop()
 
         self.assertIsNone(maybe_int)
+
+    def test_peek(self):
+        stack = Stack[int].from_sequence([3, 4, 5, 6, 7, 8, 9])
+
+        self.assertEqual(stack.peek(), 9)
+
+        empty = Stack[bool]()
+
+        self.assertRaises(EmptyStackError, empty.peek)
+
+    def test_try_peek(self):
+        stack = Stack[bool]()
+
+        stack.push(True)
+
+        self.assertEqual(stack.try_peek(), True)
+
+        stack.pop()
+
+        self.assertIsNone(stack.try_peek())
+
+    def test_stack_iterator(self):
+        from_zero_to_nine = [i for i in range(10)]
+        stack = Stack[int].from_sequence(from_zero_to_nine)
+        from_nine_to_zero = reversed(from_zero_to_nine)
+
+        self.assertListEqual(list(stack.__iter__()), list(from_nine_to_zero))
 
 
 if __name__ == "__main__":

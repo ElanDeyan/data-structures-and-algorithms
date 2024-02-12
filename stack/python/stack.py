@@ -41,17 +41,15 @@ class Stack(Collection, Generic[E]):
     def clear(self) -> None:
         self._internal_list.clear()
 
-    @property
     def peek(self) -> E:
         if len(self._internal_list) > 0:
             return self._internal_list[-1]
         else:
             raise EmptyStackError()
 
-    @property
     def try_peek(self) -> E | None:
         try:
-            return self.peek
+            return self.peek()
         except EmptyStackError:
             return None
 
