@@ -58,6 +58,8 @@ class TestStack(unittest.TestCase):
 
         stack.push(5)
 
+        self.assertGreater(len(stack), 0)
+
         self.assertIn(5, stack)
 
         stack.push(3)
@@ -67,6 +69,8 @@ class TestStack(unittest.TestCase):
         stack = Stack[int].from_sequence([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         poped_item = stack.pop()
+
+        self.assertLess(len(stack), 10)
 
         self.assertEqual(poped_item, 10)
 
@@ -115,6 +119,15 @@ class TestStack(unittest.TestCase):
         from_nine_to_zero = reversed(from_zero_to_nine)
 
         self.assertListEqual(list(stack.__iter__()), list(from_nine_to_zero))
+
+    def test_clear(self):
+        stack = Stack[int].from_sequence([1,2,3,4,5])
+
+        self.assertEqual(len(stack), 5)
+
+        stack.clear()
+
+        self.assertEqual(len(stack), 0)
 
 
 if __name__ == "__main__":
