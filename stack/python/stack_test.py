@@ -13,6 +13,8 @@ class TestStack(unittest.TestCase):
 
         self.assertIsInstance(maybe_stack, Stack)
 
+        self.assertNotIsInstance([1, 2, 3, 4, 5], Stack)
+
         self.assertIsInstance(maybe_stack_from_sequence, Stack)
 
     def test_len(self):
@@ -21,6 +23,8 @@ class TestStack(unittest.TestCase):
         self.assertEqual(len(empty_stack), 0)
 
         stack_from_sequence = Stack[int].from_sequence([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+        self.assertGreater(len(stack_from_sequence), 0)
 
         self.assertEqual(len(stack_from_sequence), 10)
 
@@ -31,9 +35,13 @@ class TestStack(unittest.TestCase):
 
         self.assertIn(1.0, stack)
 
+        self.assertNotIn(5.0, stack)
+
         another = Stack[str].from_sequence(["oi", "tudo", "bem", "?"])
 
         self.assertIn("oi", another)
+
+        self.assertNotIn("am i here?", another)
 
     def test_emptiness(self):
         empty = Stack[int]()
