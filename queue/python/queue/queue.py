@@ -6,8 +6,8 @@ from collections import deque
 from collections.abc import Collection, Iterator
 from typing import Generic, Optional, Self, Sequence, TypeVar, override
 
-from python.queue.full_queue_exception import FullQueueException
-from python.queue.empty_queue_exception import EmptyQueueException
+from queue.full_queue_exception import FullQueueException
+from queue.empty_queue_exception import EmptyQueueException
 
 E = TypeVar("E")
 
@@ -131,14 +131,13 @@ class Queue(Collection, Generic[E]):
         return len(self._internal_deque)
 
     @override
-    def __contains__(self, item: E) -> bool:
+    def __contains__(self, item: object) -> bool:
         return item in self._internal_deque
 
     @override
     def __iter__(self) -> Iterator[E]:
         return self
 
-    @override
     def __next__(self) -> E:
         if self._iterator_index < len(self):
             item = self._internal_deque[self._iterator_index]

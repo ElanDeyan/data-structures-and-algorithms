@@ -1,6 +1,6 @@
 import unittest
 
-from python.queue.queue import Queue
+from queue.queue import Queue
 
 
 class TestQueue(unittest.TestCase):
