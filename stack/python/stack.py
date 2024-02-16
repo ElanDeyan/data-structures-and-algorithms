@@ -66,7 +66,7 @@ class Stack(Collection, Generic[E]):
         return element in self._internal_list
 
     @override
-    def __iter__(self) -> Iterator:
+    def __iter__(self) -> Iterator[E]:
         return self
 
     def __next__(self) -> E:
