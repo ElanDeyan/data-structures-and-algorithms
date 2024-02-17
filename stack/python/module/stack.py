@@ -8,6 +8,7 @@ Returns:
     Stack: A class that represents this data-structure.
 """
 
+from collections import deque
 from typing import Collection, Generic, Iterator, Self, TypeVar, override
 from collections.abc import Sequence
 
@@ -31,13 +32,13 @@ class Stack(Collection[E], Generic[E]):
         Stack[E]: An instance of Stack.
     """
 
-    _internal_list: list[E]
+    _internal_deque: deque[E]
     _iterator_index: int = -1
 
     def __init__(self) -> None:
         """Initializes the instance of an empty stack."""
         super().__init__()
-        self._internal_list = []
+        self._internal_deque = deque[E]()
 
     @classmethod
     def from_sequence(cls, sequence: Sequence[E]) -> Self:
@@ -62,7 +63,7 @@ class Stack(Collection[E], Generic[E]):
         Args:
             element (E): Element to be added.
         """
-        self._internal_list.append(element)
+        self._internal_deque.append(element)
 
     def pop(self) -> E:
         """Removes the element at the top of the stack (the last added one).
@@ -73,8 +74,8 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             E: The last element added in the stack.
         """
-        if len(self._internal_list) > 0:
-            return self._internal_list.pop()
+        if len(self._internal_deque) > 0:
+            return self._internal_deque.pop()
         else:
             raise EmptyStackError()
 
@@ -91,7 +92,7 @@ class Stack(Collection[E], Generic[E]):
 
     def clear(self) -> None:
         """Clear the stack of all of its elements."""
-        self._internal_list.clear()
+        self._internal_deque.clear()
 
     def peek(self) -> E:
         """The element at the 'top' of the stack.
@@ -102,8 +103,8 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             E: The element at the 'top' of the stack, without remove it.
         """
-        if len(self._internal_list) > 0:
-            return self._internal_list[-1]
+        if len(self._internal_deque) > 0:
+            return self._internal_deque[-1]
         else:
             raise EmptyStackError(message="Tried to peek in an empty stack")
 
@@ -125,7 +126,7 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             bool: `True` if the stack is empty, `False` otherwise.
         """
-        return len(self._internal_list) == 0
+        return len(self._internal_deque) == 0
 
     @override
     def __len__(self) -> int:
@@ -134,7 +135,7 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             int: Number of items in the stack.
         """
-        return len(self._internal_list)
+        return len(self._internal_deque)
 
     @override
     def __contains__(self, element: object) -> bool:
@@ -146,7 +147,7 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             bool: `True` if the element is in the stack, `False` otherwise.
         """
-        return element in self._internal_list
+        return element in self._internal_deque
 
     @override
     def __iter__(self) -> Iterator[E]:
@@ -166,8 +167,8 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             E: Next element of the stack.
         """
-        if self._iterator_index >= -len(self._internal_list):
-            item = self._internal_list[self._iterator_index]
+        if self._iterator_index >= -len(self._internal_deque):
+            item = self._internal_deque[self._iterator_index]
             self._iterator_index -= 1
 
             return item
