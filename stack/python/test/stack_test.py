@@ -49,6 +49,7 @@ class TestStack(unittest.TestCase):
         self.assertEqual(len(empty), 0)
 
         self.assertTrue(empty.is_empty)
+        self.assertFalse(empty.is_not_empty)
 
         another_stack = Stack[str]()
 
@@ -56,10 +57,12 @@ class TestStack(unittest.TestCase):
         another_stack.push("how're you?")
 
         self.assertFalse(another_stack.is_empty)
+        self.assertTrue(another_stack.is_not_empty)
 
         from_sequence = Stack[int].from_sequence([1, 2, 3, 4, 5])
 
         self.assertFalse(from_sequence.is_empty)
+        self.assertTrue(from_sequence.is_not_empty)
 
     def test_push(self):
         stack = Stack[int]()
