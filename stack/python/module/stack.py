@@ -126,7 +126,16 @@ class Stack(Collection[E], Generic[E]):
         Returns:
             bool: `True` if the stack is empty, `False` otherwise.
         """
-        return len(self._internal_deque) == 0
+        return len(self) == 0
+    
+    @property
+    def is_not_empty(self) -> bool:
+        """Checks if the stack is not empty
+
+        Returns:
+            bool: `True` if has at least one element, `False` otherwise
+        """
+        return not self.is_empty
 
     @override
     def __len__(self) -> int:
@@ -156,22 +165,4 @@ class Stack(Collection[E], Generic[E]):
         Yields:
             Iterator[E]: An iterator of the actual stack in LIFO order.
         """
-        return self
-
-    def __next__(self) -> E:
-        """The next element of the stack in LIFO order for the iterator.
-
-        Raises:
-            StopIteration: To stop the iteration process.
-
-        Returns:
-            E: Next element of the stack.
-        """
-        if self._iterator_index >= -len(self._internal_deque):
-            item = self._internal_deque[self._iterator_index]
-            self._iterator_index -= 1
-
-            return item
-        else:
-            self._iterator_index = -1
-            raise StopIteration
+        return reversed(self._internal_deque)
