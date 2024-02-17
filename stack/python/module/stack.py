@@ -16,7 +16,7 @@ from module.errors.empty_stack_error import EmptyStackError
 E = TypeVar("E")
 
 
-class Stack(Collection, Generic[E]):
+class Stack(Collection[E], Generic[E]):
     """Linear data-structure that follows LIFO policy.
 
     Args:
