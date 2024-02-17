@@ -1,8 +1,8 @@
-from stack import Stack
+from module.stack import Stack
 
 import unittest
 
-from state_error import EmptyStackError
+from module.errors.state_error import EmptyStackError
 
 
 class TestStack(unittest.TestCase):
@@ -129,7 +129,7 @@ class TestStack(unittest.TestCase):
         self.assertListEqual(list(stack.__iter__()), list(from_nine_to_zero))
 
     def test_clear(self):
-        stack = Stack[int].from_sequence([1,2,3,4,5])
+        stack = Stack[int].from_sequence([1, 2, 3, 4, 5])
 
         self.assertEqual(len(stack), 5)
 

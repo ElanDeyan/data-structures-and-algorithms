@@ -1,4 +1,4 @@
-from stack import Stack
+from module.stack import Stack
 
 
 if __name__ == "__main__":
