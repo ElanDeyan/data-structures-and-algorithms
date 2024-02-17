@@ -2,7 +2,7 @@ from module.stack import Stack
 
 import unittest
 
-from module.errors.state_error import EmptyStackError
+from module.errors.empty_stack_error import EmptyStackError
 
 
 class TestStack(unittest.TestCase):

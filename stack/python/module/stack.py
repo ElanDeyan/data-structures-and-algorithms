@@ -1,7 +1,7 @@
 from typing import Collection, Generic, Iterator, Self, TypeVar, override
 from collections.abc import Sequence
 
-from module.errors.state_error import EmptyStackError
+from module.errors.empty_stack_error import EmptyStackError
 
 E = TypeVar("E")
 
