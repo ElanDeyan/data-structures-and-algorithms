@@ -105,7 +105,7 @@ class Stack(Collection, Generic[E]):
         if len(self._internal_list) > 0:
             return self._internal_list[-1]
         else:
-            raise EmptyStackError()
+            raise EmptyStackError(message="Tried to peek in an empty stack")
 
     def try_peek(self) -> E | None:
         """The element at top of the stack. Alternative that not raises to `peek`.
