@@ -9,6 +9,8 @@ Returns:
 """
 
 from collections import deque
+from contextlib import AbstractContextManager
+from types import TracebackType
 from typing import Collection, Generic, Iterator, Self, TypeVar, override
 from collections.abc import Sequence
 
@@ -17,7 +19,7 @@ from module.errors.empty_stack_error import EmptyStackError
 E = TypeVar("E")
 
 
-class Stack(Collection[E], Generic[E]):
+class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: ignore
     """Linear data-structure that follows LIFO policy.
 
     Args:
@@ -33,7 +35,6 @@ class Stack(Collection[E], Generic[E]):
     """
 
     _internal_deque: deque[E]
-    _iterator_index: int = -1
 
     def __init__(self) -> None:
         """Initializes the instance of an empty stack."""
@@ -65,6 +66,16 @@ class Stack(Collection[E], Generic[E]):
         """
         self._internal_deque.append(element)
 
+    def push_all(self, sequence: Sequence[E]) -> None:
+        """Pushes all elements of the [sequence] to the stack.
+
+        Args:
+            sequence (Sequence[E]): Sequence to be added.
+        """
+
+        for item in sequence:
+            self.push(item)
+
     def pop(self) -> E:
         """Removes the element at the top of the stack (the last added one).
 
@@ -89,6 +100,50 @@ class Stack(Collection[E], Generic[E]):
             return self.pop()
         except EmptyStackError:
             return None
+
+    def pop_all(self) -> Iterator[E]:
+        """Pop all elements of the stack and clears the stack
+
+        Yields:
+            Iterator[E]: Iterator of all elements in the stack in LIFO order.
+        """
+        for element in iter(self):
+            yield element
+        self.clear()
+
+    def pop_n(self, n: int) -> Iterator[E]:
+        """Pops the first [n] elements in LIFO order.
+
+        Args:
+            n (int): Quantity of elements to be popeds.
+
+        Raises:
+            ValueError: When [n] is higher than actual quantity of elements.
+
+        Yields:
+            Iterator[E]: Elements popped.
+        """
+        if n > len(self):
+            raise ValueError(
+                f"The quantity of elements to pop should be less or equal to {len(self)}"
+            )
+
+        for _ in range(n):
+            yield self.pop()
+
+    def try_pop_n(self, n: int) -> Iterator[E]:
+        """Tries to pop the first [n] elements in LIFO order. Alternative to pop_n that not raises.
+
+        Args:
+            n (int): Number of elements to try to pop.
+
+        Returns:
+            Iterator[E]: If [n] <= len(self), an Iterator of the first [n] elements in LIFO order, otherwise return an Iterator of all elements popped.
+        """
+        try:
+            return self.pop_n(n)
+        except ValueError:
+            return self.pop_all()
 
     def clear(self) -> None:
         """Clear the stack of all of its elements."""
@@ -127,7 +182,7 @@ class Stack(Collection[E], Generic[E]):
             bool: `True` if the stack is empty, `False` otherwise.
         """
         return len(self) == 0
-    
+
     @property
     def is_not_empty(self) -> bool:
         """Checks if the stack is not empty
@@ -166,3 +221,19 @@ class Stack(Collection[E], Generic[E]):
             Iterator[E]: An iterator of the actual stack in LIFO order.
         """
         return reversed(self._internal_deque)
+
+    @override
+    def __enter__(self) -> Self:
+        return self
+
+    @override
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        self.clear()
+
+        if exc_type is not None:
+            pass
