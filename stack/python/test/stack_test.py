@@ -9,7 +9,11 @@ class TestStack(unittest.TestCase):
     def test_isinstance(self):
         maybe_stack = Stack[str]()
 
+        maybe_empty_stack = Stack[int].empty()
+
         maybe_stack_from_sequence = Stack[int].from_sequence([1, 2, 3, 4, 5])
+
+        self.assertIsInstance(maybe_empty_stack, Stack)
 
         self.assertIsInstance(maybe_stack, Stack)
 
@@ -22,11 +26,19 @@ class TestStack(unittest.TestCase):
 
         self.assertEqual(len(empty_stack), 0)
 
+        another_empty_stack = Stack[int].empty()
+
+        self.assertEqual(len(another_empty_stack), 0)
+
         stack_from_sequence = Stack[int].from_sequence([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         self.assertGreater(len(stack_from_sequence), 0)
 
         self.assertEqual(len(stack_from_sequence), 10)
+
+        # stack_from_sequence.pop_n(5)
+
+        # self.assertEqual(len(stack_from_sequence), 5)
 
     def test_contains(self):
         stack = Stack[float]()
@@ -50,6 +62,11 @@ class TestStack(unittest.TestCase):
 
         self.assertTrue(empty.is_empty)
         self.assertFalse(empty.is_not_empty)
+
+        one_more_empty = Stack[int].empty()
+
+        self.assertTrue(one_more_empty.is_empty)
+        self.assertFalse(one_more_empty.is_not_empty)
 
         another_stack = Stack[str]()
 
@@ -139,6 +156,52 @@ class TestStack(unittest.TestCase):
         stack.clear()
 
         self.assertEqual(len(stack), 0)
+
+    def test_push_all(self):
+        my_stack = Stack[float].empty()
+
+        self.assertTrue(my_stack.is_empty)
+
+        numbers = [1.2, 3.5, 5.6, 9.8, 10.9]
+
+        my_stack.push_all(numbers)
+
+        self.assertEqual(len(my_stack), len(numbers))
+
+        for number in numbers:
+            self.assertIn(number, my_stack)
+
+    def test_pop_all(self):
+        strings = ["hello", "everyone", ":-)"]
+        my_stack = Stack[str].from_sequence(strings)
+
+        popped_items = my_stack.pop_all()
+
+        self.assertListEqual(list(popped_items), list(reversed(strings)))
+
+        self.assertTrue(my_stack.is_empty)
+
+        self.assertEqual(len(my_stack), 0)
+
+    def test_pop_n(self):
+        nine_nines = [9 for _ in range(9)]
+
+        my_stack = Stack[int].from_sequence(nine_nines)
+
+        NUMBER_OF_ITEMS_TO_POP = 5
+
+        popped_items = my_stack.pop_n(NUMBER_OF_ITEMS_TO_POP)
+
+        NUMBER_OF_ITEMS_REMAINING = len(nine_nines) - NUMBER_OF_ITEMS_TO_POP
+
+        self.assertEqual(len(my_stack), NUMBER_OF_ITEMS_REMAINING)
+        self.assertListEqual(
+            list(popped_items), [9 for _ in range(NUMBER_OF_ITEMS_TO_POP)]
+        )
+
+        self.assertLess(NUMBER_OF_ITEMS_REMAINING, NUMBER_OF_ITEMS_TO_POP)
+
+        self.assertRaises(ValueError, my_stack.pop_n, 10)
 
 
 if __name__ == "__main__":

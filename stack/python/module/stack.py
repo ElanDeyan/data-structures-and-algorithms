@@ -58,6 +58,17 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
 
         return stack
 
+    @classmethod
+    def empty(cls) -> Self:
+        """Initializes an instance of an empty stack. Alias to the common constructor.
+
+        Prefer this constructor rather than the normal constructor.
+
+        Returns:
+            Self: An empty instance of the class Stack.
+        """
+        return cls()
+
     def push(self, element: E) -> None:
         """Adds [element] to top of the stack.
 
@@ -107,8 +118,7 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         Yields:
             Iterator[E]: Iterator of all elements in the stack in LIFO order.
         """
-        for element in iter(self):
-            yield element
+        yield from reversed(self._internal_deque)
         self.clear()
 
     def pop_n(self, n: int) -> Iterator[E]:
@@ -123,13 +133,10 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         Yields:
             Iterator[E]: Elements popped.
         """
-        if n > len(self):
-            raise ValueError(
-                f"The quantity of elements to pop should be less or equal to {len(self)}"
-            )
-
-        for _ in range(n):
-            yield self.pop()
+        if len(self) < n:
+            raise ValueError(f"Your value for n should be less or equal to {len(self)}")
+        else:
+            return iter([self.pop() for _ in range(n)])
 
     def try_pop_n(self, n: int) -> Iterator[E]:
         """Tries to pop the first [n] elements in LIFO order. Alternative to pop_n that not raises.
@@ -218,7 +225,7 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         """Iterator of the stack in LIFO order.
 
         Yields:
-            Iterator[E]: An iterator of the actual stack in LIFO order.
+            Iterator[E]: An Iterator of the actual stack in LIFO order.
         """
         return reversed(self._internal_deque)
 
