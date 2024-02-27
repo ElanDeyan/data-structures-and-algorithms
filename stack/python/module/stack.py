@@ -20,7 +20,7 @@ E = TypeVar("E")
 
 
 class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: ignore
-    """Linear data-structure that follows LIFO policy.
+    """A collection that behaves like a Stack.
 
     Args:
         Collection : Base class that describes actual class as a Collection.
