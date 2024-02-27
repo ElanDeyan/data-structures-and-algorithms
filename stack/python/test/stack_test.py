@@ -203,6 +203,22 @@ class TestStack(unittest.TestCase):
 
         self.assertRaises(ValueError, my_stack.pop_n, 10)
 
+    def try_pop_n(self):
+        int_tuple = (1, 2, 3, 4, 5, 6)
+        my_stack = Stack[int].from_sequence(int_tuple)
+
+        NUMBER_OF_ITEMS_TO_POP = 4
+
+        self.assertLess(NUMBER_OF_ITEMS_TO_POP, len(int_tuple))
+
+        my_stack.try_pop_n(NUMBER_OF_ITEMS_TO_POP)
+
+        self.assertGreater(NUMBER_OF_ITEMS_TO_POP, len(my_stack))
+
+        popped_items = list(my_stack.try_pop_n(NUMBER_OF_ITEMS_TO_POP))
+
+        self.assertGreater(NUMBER_OF_ITEMS_TO_POP, len(popped_items))
+
 
 if __name__ == "__main__":
     unittest.main()
