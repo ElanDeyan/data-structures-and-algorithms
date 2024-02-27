@@ -101,7 +101,7 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         else:
             raise EmptyStackError()
 
-    def try_pop(self) -> E | None:
+    def pop_or_none(self) -> E | None:
         """Removes the element at the top of the stack (the last added one). Alternative that returns `None` instead to raise `EmptyStackError`.
 
         Returns:
@@ -138,7 +138,7 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         else:
             return iter([self.pop() for _ in range(n)])
 
-    def try_pop_n(self, n: int) -> Iterator[E]:
+    def pop_n_or_all(self, n: int) -> Iterator[E]:
         """Tries to pop the first [n] elements in LIFO order. Alternative to pop_n that not raises.
 
         Args:
@@ -156,7 +156,7 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         """Clear the stack of all of its elements."""
         self._internal_deque.clear()
 
-    def peek(self) -> E:
+    def top(self) -> E:
         """The element at the 'top' of the stack.
 
         Raises:
@@ -170,14 +170,14 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         else:
             raise EmptyStackError(message="Tried to peek in an empty stack")
 
-    def try_peek(self) -> E | None:
+    def top_or_none(self) -> E | None:
         """The element at top of the stack. Alternative that not raises to `peek`.
 
         Returns:
             E | None: The element at the top of the stack, `None` if the stack is empty.
         """
         try:
-            return self.peek()
+            return self.top()
         except EmptyStackError:
             return None
 

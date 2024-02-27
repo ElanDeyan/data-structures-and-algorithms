@@ -113,33 +113,33 @@ class TestStack(unittest.TestCase):
     def test_try_pop(self):
         stack = Stack[int].from_sequence([1])
 
-        poped_item = stack.try_pop()
+        poped_item = stack.pop_or_none()
 
         self.assertEqual(poped_item, 1)
 
-        maybe_int = stack.try_pop()
+        maybe_int = stack.pop_or_none()
 
         self.assertIsNone(maybe_int)
 
     def test_peek(self):
         stack = Stack[int].from_sequence([3, 4, 5, 6, 7, 8, 9])
 
-        self.assertEqual(stack.peek(), 9)
+        self.assertEqual(stack.top(), 9)
 
         empty = Stack[bool]()
 
-        self.assertRaises(EmptyStackError, empty.peek)
+        self.assertRaises(EmptyStackError, empty.top)
 
     def test_try_peek(self):
         stack = Stack[bool]()
 
         stack.push(True)
 
-        self.assertEqual(stack.try_peek(), True)
+        self.assertEqual(stack.top_or_none(), True)
 
         stack.pop()
 
-        self.assertIsNone(stack.try_peek())
+        self.assertIsNone(stack.top_or_none())
 
     def test_stack_iterator(self):
         from_zero_to_nine = [i for i in range(10)]
@@ -211,11 +211,11 @@ class TestStack(unittest.TestCase):
 
         self.assertLess(NUMBER_OF_ITEMS_TO_POP, len(int_tuple))
 
-        my_stack.try_pop_n(NUMBER_OF_ITEMS_TO_POP)
+        my_stack.pop_n_or_all(NUMBER_OF_ITEMS_TO_POP)
 
         self.assertGreater(NUMBER_OF_ITEMS_TO_POP, len(my_stack))
 
-        popped_items = list(my_stack.try_pop_n(NUMBER_OF_ITEMS_TO_POP))
+        popped_items = list(my_stack.pop_n_or_all(NUMBER_OF_ITEMS_TO_POP))
 
         self.assertGreater(NUMBER_OF_ITEMS_TO_POP, len(popped_items))
 
