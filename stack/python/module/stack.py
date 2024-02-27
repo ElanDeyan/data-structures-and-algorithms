@@ -118,7 +118,9 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         Yields:
             Iterator[E]: Iterator of all elements in the stack in LIFO order.
         """
-        yield from reversed(self._internal_deque)
+        while self.is_not_empty:
+            yield self.pop()
+
         self.clear()
 
     def pop_n(self, n: int) -> Iterator[E]:
@@ -136,7 +138,8 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         if len(self) < n:
             raise ValueError(f"Your value for n should be less or equal to {len(self)}")
         else:
-            return iter([self.pop() for _ in range(n)])
+            for _ in range(n):
+                yield self.pop()
 
     def pop_n_or_all(self, n: int) -> Iterator[E]:
         """Tries to pop the first [n] elements in LIFO order. Alternative to pop_n that not raises.
@@ -243,4 +246,4 @@ class Stack(Collection[E], Generic[E], AbstractContextManager[Self]):  # type: i
         self.clear()
 
         if exc_type is not None:
-            pass
+            raise exc_type()

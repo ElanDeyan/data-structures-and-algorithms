@@ -190,9 +190,9 @@ class TestStack(unittest.TestCase):
 
         NUMBER_OF_ITEMS_TO_POP = 5
 
-        popped_items = my_stack.pop_n(NUMBER_OF_ITEMS_TO_POP)
-
         NUMBER_OF_ITEMS_REMAINING = len(nine_nines) - NUMBER_OF_ITEMS_TO_POP
+
+        popped_items = list(my_stack.pop_n(NUMBER_OF_ITEMS_TO_POP))
 
         self.assertEqual(len(my_stack), NUMBER_OF_ITEMS_REMAINING)
         self.assertListEqual(
@@ -201,7 +201,8 @@ class TestStack(unittest.TestCase):
 
         self.assertLess(NUMBER_OF_ITEMS_REMAINING, NUMBER_OF_ITEMS_TO_POP)
 
-        self.assertRaises(ValueError, my_stack.pop_n, 10)
+        with self.assertRaises(ValueError):
+            list(my_stack.pop_n(10))
 
     def try_pop_n(self):
         int_tuple = (1, 2, 3, 4, 5, 6)
