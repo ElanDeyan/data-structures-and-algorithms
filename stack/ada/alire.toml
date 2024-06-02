@@ -1,0 +1,10 @@
+name = "stackada"
+description = "An implementation of a stack data structure in ada"
+version = "0.1.0-dev"
+
+authors = ["Elan Deyan Almeida"]
+maintainers = ["Elan Deyan Almeida <elandeyandasilva@gmail.com>"]
+maintainers-logins = ["ElanDeyan"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = ["ada", "stack", "data-structures"]
