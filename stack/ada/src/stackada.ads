@@ -3,50 +3,75 @@ pragma Extensions_Allowed (On);
 
 with Ada.Containers.Vectors;
 generic
-    -- Type of the content
-    type Element_Type is private;
-    -- Type of the index of internal vector
-    type Index_Type is range <>;
+   type Element_Type is private;
+   type Index_Type is range <>;
 
 package Stackada is
-    type Unbounded_Stack is limited private;
+   type Unbounded_Stack is tagged private;
 
-    type Elements_Array is array(Index_Type) of Element_Type;
+   type Elements_Array is array (Index_Type range <>) of Element_Type;
 
-    procedure Push (Stack: in out Unbounded_Stack; Element: in Element_Type);
+   type Maybe (Has_Element : Boolean := False) is record
+      case Has_Element is
+         when True =>
+            Value : Element_Type;
+         when False =>
+            null;
+      end case;
+   end record;
 
-    procedure Push_All (Stack: in out Unbounded_Stack; Elements : in Elements_Array);
+   subtype None is Maybe (Has_Element => False);
+   subtype Just is Maybe (Has_Element => True);
 
-    function Pop (Stack: in out Unbounded_Stack) return Element_Type
-        with Pre => Stack.Is_Not_Empty;
-    
-    procedure Pop (Stack: in out Unbounded_Stack; Output: out Element_Type)
-        with Pre => Stack.Is_Not_Empty;
+   procedure Push (Stack : in out Unbounded_Stack; Element : Element_Type) with
+      Post => (Stack.Length = Stack'Old.Length + 1)
+      and then (Stack.Contains (Element));
 
-    function Peek (Stack: in out Unbounded_Stack) return Element_Type
-        with Pre => Stack.Is_Not_Empty;
-    
-    procedure Peek (Stack: in out Unbounded_Stack; Output: out Element_Type)
-        with Pre => Stack.Is_Not_Empty;
+   procedure Push_All
+     (Stack : in out Unbounded_Stack; Elements : Elements_Array) with
+      Post => Stack.Length = Stack'Old.Length + Elements'Length;
 
-    function Is_Empty (Stack: in Unbounded_Stack) return Boolean;
+   function Pop (Stack : in out Unbounded_Stack) return Element_Type with
+      Pre  => Stack.Is_Not_Empty,
+      Post => Stack.Length = Stack'Old.Length - 1;
 
-    function Is_Not_Empty (Stack: in Unbounded_Stack) return Boolean;
+   function Try_Pop (Stack : in out Unbounded_Stack) return Maybe;
 
-    function Length (Stack: in Unbounded_Stack) return Natural;
+   procedure Pop
+     (Stack : in out Unbounded_Stack; Output : out Element_Type) with
+      Pre  => Stack.Is_Not_Empty,
+      Post => Stack.Length = Stack'Old.Length - 1;
 
-    function Contains (Stack: in Unbounded_Stack; Element: in Element_Type) return Boolean;
+   procedure Try_Pop (Stack : in out Unbounded_Stack; Output : out Maybe);
 
-    Empty_Stack_State: exception;
+   function Peek (Stack : in out Unbounded_Stack) return Element_Type with
+      Pre => Stack.Is_Not_Empty;
+
+   function Try_Peek (Stack : in out Unbounded_Stack) return Maybe;
+
+   procedure Peek
+     (Stack : in out Unbounded_Stack; Output : out Element_Type) with
+      Pre => Stack.Is_Not_Empty;
+
+   procedure Try_Peek (Stack : in out Unbounded_Stack; Output : out Maybe);
+
+   function Is_Empty (Stack : Unbounded_Stack) return Boolean;
+
+   function Is_Not_Empty (Stack : Unbounded_Stack) return Boolean;
+
+   function Length (Stack : Unbounded_Stack) return Natural;
+
+   function Contains
+     (Stack : Unbounded_Stack; Element : Element_Type) return Boolean;
+
+   Empty_Stack_State : exception;
 
 private
-    package Vectors is new Ada.Containers.Vectors
-      (Index_Type   => Index_Type,
-       Element_Type => Element_Type
-       );
+   package Vectors is new Ada.Containers.Vectors
+     (Index_Type => Index_Type, Element_Type => Element_Type);
 
-       use Vectors;
-    type Unbounded_Stack is record
-        Internal_Container: Vectors.Vector;
-    end record;
+   use Vectors;
+   type Unbounded_Stack is tagged record
+      Internal_Container : Vectors.Vector;
+   end record;
 end Stackada;
