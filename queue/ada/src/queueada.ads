@@ -27,28 +27,34 @@ is
    Empty_Queue_State : exception;
 
    function Is_Empty (Queue : Unbounded_Queue) return Boolean with
-      Pure_Function, Inline;
+      Pure_Function,
+      Inline;
 
    function Is_Not_Empty (Queue : Unbounded_Queue) return Boolean with
-      Pure_Function, Inline;
+      Pure_Function,
+      Inline;
 
    function Contains (Queue : Unbounded_Queue; Element : E) return Boolean with
-      Pure_Function, Inline;
+      Pure_Function,
+      Inline;
 
    function Length (Queue : Unbounded_Queue) return Natural with
-      Pure_Function, Inline;
+      Pure_Function,
+      Inline;
 
    function Peek (Queue : Unbounded_Queue) return E with
       Pre => Queue.Length >= 0,
-      Pure_Function, Inline;
+      Pure_Function,
+      Inline;
 
    procedure Peek (Queue : Unbounded_Queue; Output : out E) with
-      Pre => Queue.Length >= 0,
+      Pre     => Queue.Length >= 0,
       Depends => (Output => Queue),
       Global  => null;
 
    function Try_Peek (Queue : Unbounded_Queue) return Maybe with
-      Pure_Function;
+      Pure_Function,
+      Inline;
 
    procedure Try_Peek (Queue : Unbounded_Queue; Output : out Maybe) with
       Depends => (Output => Queue),
